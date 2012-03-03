@@ -87,7 +87,7 @@ import com.hivewallet.androidclient.wallet.util.HttpGetThread;
 import com.hivewallet.androidclient.wallet.util.Iso8601Format;
 import com.hivewallet.androidclient.wallet.util.Nfc;
 import com.hivewallet.androidclient.wallet.util.WalletUtils;
-import com.hivewallet.androidclient.wallet_test.R;
+import com.hivewallet.androidclient.wallet.R;
 
 /**
  * @author Andreas Schildbach
