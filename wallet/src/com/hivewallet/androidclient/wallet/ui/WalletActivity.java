@@ -619,7 +619,7 @@ public final class WalletActivity extends AbstractOnDemandServiceActivity
 					}
 				}
 
-				if (serverVersionCode > packageInfo.versionCode)
+				if (serverVersionCode > packageInfo.versionCode && Constants.ENABLE_VERSION_ALERT)
 				{
 					runOnUiThread(new Runnable()
 					{
