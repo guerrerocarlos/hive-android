@@ -68,10 +68,12 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.bitcoin.core.Address;
 import com.google.bitcoin.core.AddressFormatException;
 import com.google.bitcoin.core.ECKey;
 import com.google.bitcoin.core.Transaction;
 import com.google.bitcoin.core.Wallet;
+import com.google.bitcoin.core.WrongNetworkException;
 
 import com.hivewallet.androidclient.wallet.Configuration;
 import com.hivewallet.androidclient.wallet.Constants;
@@ -301,6 +303,11 @@ public final class WalletActivity extends AbstractOnDemandServiceActivity
 	public void handleSendCoins()
 	{
 		startActivity(new Intent(this, SendCoinsActivity.class));
+	}
+	
+	public void handleSendCoinsToAddress(String address , String label) throws AddressFormatException
+	{
+		SendCoinsActivity.start(this, PaymentIntent.fromAddress(address, label));
 	}
 
 	public void handleScan()
