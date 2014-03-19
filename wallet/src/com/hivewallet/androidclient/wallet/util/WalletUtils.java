@@ -57,6 +57,7 @@ import com.google.bitcoin.core.TransactionInput;
 import com.google.bitcoin.core.TransactionOutput;
 import com.google.bitcoin.core.Wallet;
 import com.google.bitcoin.script.Script;
+import com.google.common.math.BigIntegerMath;
 
 import com.hivewallet.androidclient.wallet.Constants;
 
@@ -117,7 +118,13 @@ public class WalletUtils
 
 	public static void formatSignificant(@Nonnull final Editable s, @Nullable final RelativeSizeSpan insignificantRelativeSizeSpan)
 	{
-		s.removeSpan(SIGNIFICANT_SPAN);
+		formatSignificant(s, insignificantRelativeSizeSpan, true);
+	}
+
+	public static void formatSignificant(@Nonnull final Editable s, @Nullable final RelativeSizeSpan insignificantRelativeSizeSpan, boolean useBold)
+	{
+		if (useBold)
+			s.removeSpan(SIGNIFICANT_SPAN);
 		if (insignificantRelativeSizeSpan != null)
 			s.removeSpan(insignificantRelativeSizeSpan);
 
@@ -125,7 +132,8 @@ public class WalletUtils
 		if (m.find())
 		{
 			final int pivot = m.group().length();
-			s.setSpan(SIGNIFICANT_SPAN, 0, pivot, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			if (useBold)
+				s.setSpan(SIGNIFICANT_SPAN, 0, pivot, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			if (s.length() > pivot && insignificantRelativeSizeSpan != null)
 				s.setSpan(insignificantRelativeSizeSpan, pivot, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		}
