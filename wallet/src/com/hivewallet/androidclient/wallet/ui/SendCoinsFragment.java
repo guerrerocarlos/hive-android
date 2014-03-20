@@ -349,6 +349,7 @@ public final class SendCoinsFragment extends SherlockFragment
 				data.moveToFirst();
 				final ExchangeRate exchangeRate = ExchangeRatesProvider.getExchangeRate(data);
 
+				sentTransactionListAdapter.setExchangeRate(exchangeRate);
 				if (state == State.INPUT)
 					amountCalculatorLink.setExchangeRate(exchangeRate);
 			}
