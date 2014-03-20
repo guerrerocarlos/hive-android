@@ -166,4 +166,23 @@ public class GenericUtils
 			throw new RuntimeException(x);
 		}
 	}
+	
+	public static String shortenString(@Nonnull final String string)
+	{
+		final int length = string.length();
+		
+		if (length <= 11)
+		{
+			return string;
+		}
+		else
+		{
+			final StringBuilder sb = new StringBuilder();
+			
+			sb.append(string.substring(0, 4));
+			sb.append("...");
+			sb.append(string.substring(length - 4, length));
+			return sb.toString();
+		}
+	}
 }
