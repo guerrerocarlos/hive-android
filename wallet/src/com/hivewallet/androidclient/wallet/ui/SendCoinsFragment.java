@@ -31,11 +31,13 @@ import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -51,6 +53,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -63,6 +66,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -101,6 +105,7 @@ import com.hivewallet.androidclient.wallet.ui.InputParser.StringInputParser;
 import com.hivewallet.androidclient.wallet.util.GenericUtils;
 import com.hivewallet.androidclient.wallet.util.Nfc;
 import com.hivewallet.androidclient.wallet.util.PaymentProtocol;
+import com.hivewallet.androidclient.wallet.util.PhoneContactPictureLookupService;
 import com.hivewallet.androidclient.wallet.util.WalletUtils;
 import com.hivewallet.androidclient.wallet_test.R;
 
@@ -568,6 +573,9 @@ public final class SendCoinsFragment extends SherlockFragment
 		amountCalculatorLink.setListener(amountsListener);
 
 		loaderManager.initLoader(ID_RATE_LOADER, null, rateLoaderCallbacks);
+		
+		IntentFilter iff = new IntentFilter(PhoneContactPictureLookupService.ACTION);
+		LocalBroadcastManager.getInstance(activity).registerReceiver(broadcastReceiver, iff);		
 
 		updateView();
 	}
@@ -576,6 +584,8 @@ public final class SendCoinsFragment extends SherlockFragment
 	public void onPause()
 	{
 		loaderManager.destroyLoader(ID_RATE_LOADER);
+		
+		LocalBroadcastManager.getInstance(activity).unregisterReceiver(broadcastReceiver);
 
 		amountCalculatorLink.setListener(null);
 
@@ -1342,4 +1352,21 @@ public final class SendCoinsFragment extends SherlockFragment
 			}
 		}, application.httpUserAgent()).requestPaymentRequest(paymentRequestUrl);
 	}
+
+	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver()
+	{
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			String label = intent.getStringExtra(PhoneContactPictureLookupService.LABEL);
+			String tag = intent.getStringExtra(PhoneContactPictureLookupService.TAG);
+			Uri uri = Uri.parse(intent.getStringExtra(PhoneContactPictureLookupService.URI));
+
+			sentTransactionListAdapter.supplyContactPhoto(label, uri);
+			View view = sentTransactionView.findViewWithTag(tag);
+			if (view != null) {
+				((ImageView)view).setImageURI(uri);
+			}
+		}
+	};	
 }
