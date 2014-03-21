@@ -659,7 +659,8 @@ public final class WalletActivity extends AbstractOnDemandServiceActivity
 		if (!config.hasBtcPrecision()
 				&& config.changeLogVersionCodeCrossed(application.packageInfo().versionCode, DEFAULT_PRECISION_CHANGE_VERSION_CODE))
 		{
-			showDialog(DIALOG_CHANGELOG);
+			/* no changelog dialog at the moment */
+			//showDialog(DIALOG_CHANGELOG);
 		}
 		else if (CrashReporter.hasSavedCrashTrace())
 		{
