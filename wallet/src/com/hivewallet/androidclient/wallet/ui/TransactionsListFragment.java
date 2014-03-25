@@ -523,10 +523,13 @@ public class TransactionsListFragment extends SherlockListFragment implements Lo
 			Uri uri = Uri.parse(intent.getStringExtra(PhoneContactPictureLookupService.URI));
 
 			adapter.supplyContactPhoto(label, uri);
-			View view = getListView().findViewWithTag(tag);
-			if (view != null) {
-				((ImageView)view).setImageURI(uri);
-			}
+			
+			try {
+				View view = getListView().findViewWithTag(tag);
+				if (view != null) {
+					((ImageView)view).setImageURI(uri);
+				}
+			} catch (IllegalStateException ignored) { /* do nothing if the ListView is not ready yet */ }
 		}
 	};	
 
