@@ -247,6 +247,10 @@ public final class WalletActivity extends AbstractOnDemandServiceActivity
 			case R.id.wallet_options_scan:
 				handleScan();
 				return true;
+				
+			case R.id.wallet_options_app_platform:
+				startActivity(new Intent(this, AppPlatformActivity.class));
+				return true;
 
 			case R.id.wallet_options_address_book:
 				AddressBookActivity.start(this, true);
