@@ -64,6 +64,7 @@ import com.google.bitcoin.wallet.WalletFiles;
 
 import com.hivewallet.androidclient.wallet.service.BlockchainService;
 import com.hivewallet.androidclient.wallet.service.BlockchainServiceImpl;
+import com.hivewallet.androidclient.wallet.util.AppPlatformDBHelper;
 import com.hivewallet.androidclient.wallet.util.CrashReporter;
 import com.hivewallet.androidclient.wallet.util.Io;
 import com.hivewallet.androidclient.wallet.util.LinuxSecureRandom;
@@ -84,6 +85,7 @@ public class WalletApplication extends Application
 	private File walletFile;
 	private Wallet wallet;
 	private PackageInfo packageInfo;
+	private AppPlatformDBHelper appPlatformDBHelper;
 
 	private static final int KEY_ROTATION_VERSION_CODE = 135;
 	private static final boolean KEY_ROTATION_ENABLED = false;
@@ -146,6 +148,8 @@ public class WalletApplication extends Application
 		ensureKey();
 
 		migrateBackup();
+		
+		appPlatformDBHelper = new AppPlatformDBHelper(this);
 	}
 
 	private void initLogging()
@@ -221,6 +225,11 @@ public class WalletApplication extends Application
 	public Wallet getWallet()
 	{
 		return wallet;
+	}
+	
+	public AppPlatformDBHelper getAppPlatformDBHelper()
+	{
+		return appPlatformDBHelper;
 	}
 
 	private void loadWalletFromProtobuf()
