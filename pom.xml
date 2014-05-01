@@ -75,7 +75,7 @@
 						<genDirectory>${basedir}/gen</genDirectory>
 						<dex>
 							<optimize>false</optimize>
-							<preDex>true</preDex>
+							<incremental>true</incremental>
 						</dex>
 					</configuration>
 					<extensions>true</extensions>
