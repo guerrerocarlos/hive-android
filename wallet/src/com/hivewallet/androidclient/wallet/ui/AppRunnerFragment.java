@@ -40,6 +40,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -306,7 +307,7 @@ public class AppRunnerFragment extends Fragment implements LoaderManager.LoaderC
 			this.platformJS = platformJS;
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public String init() {
 			return platformJS;
 		}
@@ -344,7 +345,7 @@ public class AppRunnerFragment extends Fragment implements LoaderManager.LoaderC
 			this.accessedHosts = appPlatformDBHelper.getAccessedHosts(appId);
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public void getUserInfo(long callbackId) {
 			Address address = application.determineSelectedAddress();
 			Map<String, String> info = new HashMap<String, String>();
@@ -355,7 +356,7 @@ public class AppRunnerFragment extends Fragment implements LoaderManager.LoaderC
 			performCallback(callbackId, toJSDataStructure(info));
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public void getSystemInfo(long callbackId) {
 			Map<String, String> info = new HashMap<String, String>();
 			
@@ -390,31 +391,32 @@ public class AppRunnerFragment extends Fragment implements LoaderManager.LoaderC
 			performCallback(callbackId, toJSDataStructure(info));
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public String userStringForSatoshi(long longAmount) {
 			BigInteger amount = BigInteger.valueOf(longAmount);
 			return GenericUtils.formatValue(amount, config.getBtcPrecision(), config.getBtcShift());
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public long satoshiFromUserString(String amountStr) {
 			int shift = config.getBtcShift();
 			BigInteger amount = GenericUtils.parseValue(amountStr, shift);
 			return amount.longValue();
 		}
-		
-		@SuppressWarnings("unused")
+
+		@JavascriptInterface
 		public String userStringForCurrencyValue(long longAmount) {
 			BigInteger amount = BigInteger.valueOf(longAmount);
 			return GenericUtils.formatValue(amount, Constants.LOCAL_PRECISION, 0);
 		}
-		
-		@SuppressWarnings("unused")
+
+		@JavascriptInterface
 		public long valueFromUserString(String amountStr) {
 			BigInteger amount = GenericUtils.parseValue(amountStr, 0);
 			return amount.longValue();
 		}
 		
+		@JavascriptInterface
 		public void sendMoney1(long callbackId, String addressStr, long amountLong) {
 			Address address = null;
 			
@@ -438,7 +440,7 @@ public class AppRunnerFragment extends Fragment implements LoaderManager.LoaderC
 			fragment.startActivityForResult(intent, REQUEST_CODE_SEND_MONEY);
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public void sendMoney2(long callbackId, String addressStr) {
 			sendMoney1(callbackId, addressStr, -1);
 		}
@@ -456,7 +458,8 @@ public class AppRunnerFragment extends Fragment implements LoaderManager.LoaderC
 			lastSendMoneyCallbackId = -1;
 		}
 		
-		@SuppressWarnings({ "unused", "deprecation" })
+		@SuppressWarnings("deprecation")
+		@JavascriptInterface
 		public void getTransaction(long callbackId, String txid) {
 			Wallet wallet = application.getWallet();
 			Transaction tx = null;
@@ -501,23 +504,23 @@ public class AppRunnerFragment extends Fragment implements LoaderManager.LoaderC
 			}
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public void subscribeToExchangeRateUpdates() {
 			shouldForwardExchangeRateUpdates = true;
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public void unsubscribeFromExchangeRateUpdates() {
 			shouldForwardExchangeRateUpdates = false;
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public void updateExchangeRate(String currency) {
 			maybeForwardExchangeRateUpdates(currency);	// if do not have data yet, we will forward it
 														// as soon as we receive it
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public void makeRequest(long callbackId, String url, String method, String data) {
 			final long myCallbackId = callbackId;
 			
@@ -619,7 +622,7 @@ public class AppRunnerFragment extends Fragment implements LoaderManager.LoaderC
 			forwardExchangeRateUpdate(toJSDataStructure(info));
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public void getApplication(long callbackId, String appId) {
 			Map<String, String> manifest = appPlatformDBHelper.getAppManifest(appId);
 			
@@ -630,7 +633,7 @@ public class AppRunnerFragment extends Fragment implements LoaderManager.LoaderC
 			}
 		}
 		
-		@SuppressWarnings("unused")
+		@JavascriptInterface
 		public void installApp(long callbackId, String url) {
 			if (appInstaller != null) {
 				/* Concurrent install are not supported at the moment */
