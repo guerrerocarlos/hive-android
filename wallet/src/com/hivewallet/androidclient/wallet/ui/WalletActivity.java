@@ -187,6 +187,8 @@ public final class WalletActivity extends AbstractOnDemandServiceActivity
 	@Override
 	public void onActivityResult(final int requestCode, final int resultCode, final Intent intent)
 	{
+		super.onActivityResult(requestCode, resultCode, intent);
+		
 		if (requestCode == REQUEST_CODE_SCAN && resultCode == Activity.RESULT_OK)
 		{
 			final String input = intent.getStringExtra(ScanActivity.INTENT_EXTRA_RESULT);
